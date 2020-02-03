@@ -139,8 +139,6 @@ typedef struct IotNetworkManager
  */
     static bool _bleDisable( void );
 
-    void hack_function( void );
-
 /**
  * @brief Callback invokedon a new BLE connection or disconnection.
  */
@@ -444,7 +442,7 @@ static IotNetworkManager_t networkManager =
                 }
                 else
                 {
-                    configPRINTF(("Did not connect to WiFi. Attempt to reconnect in %d milli seconds. \n", delayMilliseconds));
+                    configPRINTF(("Did not connect to WiFi. Attempt to reconnect in %d ms. \n", delayMilliseconds));
 
                     if (delayMilliseconds < 32000) //Upper cap of 32s
                     {
