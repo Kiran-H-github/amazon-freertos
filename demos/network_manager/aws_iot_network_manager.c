@@ -139,7 +139,6 @@ typedef struct IotNetworkManager
  */
     static bool _bleDisable( void );
 
-
 /**
  * @brief Callback invokedon a new BLE connection or disconnection.
  */
@@ -443,13 +442,16 @@ static IotNetworkManager_t networkManager =
                 }
                 else
                 {
-                    if( numRetries > 0 )
+                    configPRINTF(("Did not connect to WiFi. Attempt to reconnect in %d ms. \n", delayMilliseconds));
+
+                    if (delayMilliseconds < 32000) //Upper cap of 32s
                     {
-                        IotClock_SleepMs( delayMilliseconds );
-                        delayMilliseconds = delayMilliseconds * 2;
+                        delayMilliseconds *= 2;
                     }
+                    IotClock_SleepMs( delayMilliseconds ); //Exponentially increase reconnection trial time
                 }
-            } while( numRetries-- > 0 );
+
+            } while(1);
 
             return ret;
         }
@@ -889,6 +891,12 @@ uint32_t AwsIotNetworkManager_EnableNetwork( uint32_t networkTypes )
         }
     #endif
     return enabled;
+}
+
+// TODO: This is a temp function that should be removed. In future, use network callback functions.
+void hack_function()
+{
+    wifiNetwork.state = eNetworkStateUnknown;
 }
 
 uint32_t AwsIotNetworkManager_DisableNetwork( uint32_t networkTypes )
