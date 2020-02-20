@@ -44,6 +44,9 @@
 #include "aws_clientcredential.h"
 #include "aws_clientcredential_keys.h"
 
+#include "driver/gpio.h" // HACK: This is only for the wifi status LED
+#include "esp32_pinout.h"
+
 #if BLE_ENABLED
     #include "iot_ble_config.h"
     #include "iot_ble.h"
@@ -75,6 +78,9 @@
 
 #define _NM_WIFI_CONNECTION_RETRIES              ( 5 )
 
+// HACK: Define the pin for giving the status of the Wifi
+// TODO: Add a pinout header file which lists the pins being used in one place.
+const int wifi_status_LED = WIFI_STATUS_PIN;
 
 /**
  * @brief Structure holds information for each network and the runtime state of it.
@@ -438,6 +444,7 @@ static IotNetworkManager_t networkManager =
                 {
                     ret = true;
                     wifiNetwork.state = eNetworkStateEnabled;
+                    GPIO_OUTPUT_SET(wifi_status_LED, 1); // HACK
                     break;
                 }
                 else
@@ -448,6 +455,12 @@ static IotNetworkManager_t networkManager =
                     {
                         delayMilliseconds *= 2;
                     }
+                    else
+                    {
+                        // HACK: If the time it takes to reconnect is too long then we deem the device to be disconnected from the internet.
+                        GPIO_OUTPUT_SET(wifi_status_LED, 0);
+                    }
+
                     IotClock_SleepMs( delayMilliseconds ); //Exponentially increase reconnection trial time
                 }
 
