@@ -451,13 +451,14 @@ static IotNetworkManager_t networkManager =
                 {
                     configPRINTF(("Did not connect to WiFi. Attempt to reconnect in %d ms. \n", delayMilliseconds));
 
-                    if (delayMilliseconds < 32000) //Upper cap of 32s
+                    if (delayMilliseconds < 8000) //Upper cap of 8s
                     {
                         delayMilliseconds *= 2;
                     }
                     else
                     {
                         // HACK: If the time it takes to reconnect is too long then we deem the device to be disconnected from the internet.
+                        DeleteToggleWiFiLEDTask();
                         GPIO_OUTPUT_SET(wifi_status_LED, 0);
                     }
 

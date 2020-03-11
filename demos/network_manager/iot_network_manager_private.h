@@ -95,6 +95,9 @@ typedef void ( * AwsIotNetworkStateChangeCb_t ) ( uint32_t ulNetworkType,
 // The function pretty much forces a desired state.
 void hack_function();
 
+// HACK: This function deletes the task which toggles the Wifi LED
+void DeleteToggleWiFiLEDTask(void);
+
 /**
  * @brief API  to subscribe for the network state change event.
  *
