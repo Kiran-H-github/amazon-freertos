@@ -79,7 +79,6 @@
 #define _NM_WIFI_CONNECTION_RETRIES              ( 5 )
 
 // HACK: Define the pin for giving the status of the Wifi
-// TODO: Add a pinout header file which lists the pins being used in one place.
 const int wifi_status_LED = WIFI_STATUS_PIN;
 
 /**
